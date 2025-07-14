@@ -21,6 +21,7 @@ if [ $? -eq 0 ]; then
   stow editorconfig
   stow starship
   stow alacritty
+  stow bash
 else
   echo "Failed to clone the repository."
   exit 1
