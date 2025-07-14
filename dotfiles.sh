@@ -20,6 +20,7 @@ if [ $? -eq 0 ]; then
   stow tmux
   stow editorconfig
   stow starship
+  stow alacritty
 else
   echo "Failed to clone the repository."
   exit 1
