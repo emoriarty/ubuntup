@@ -69,3 +69,11 @@ function install_lazygit() {
 function install_lazydocker() {
   curl -fsSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | sudo DIR="/usr/local/bin" bash
 }
+
+function install_tpm() {
+  local tpm_path="$HOME/.tmux/plugins/tpm"
+
+  if ! [ -d "$tpm_path" ]; then
+    git clone https://github.com/tmux-plugins/tpm "$tpm_path"
+  fi
+}
