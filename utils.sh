@@ -29,32 +29,51 @@ function install_package() {
 }
 
 function is_extended_package_installed() {
-	# check with brew if a package is installed
   local package="$1"
-  if command -v "$package" &> /dev/null; then
-    return 0  # Package is installed
+
+  if [[ "$package" == *::* ]]; then
+    local path="${package##*::}"
+
+    # Expand ~ manually
+    [[ "$path" == ~* ]] && path="${path/#\~/$HOME}"
+
+    [[ -e "$path" ]]  # Checks whether file or directory exists
+    return $?
   else
-    return 1  # Package is not installed
+    command -v "$package" &> /dev/null
+    return $?
   fi
 }
+
 
 # Function to install packages if not already installed
 function install_extended_package() {
   local packages=("$@")
   local to_install=()
 
+  # Identify packages that are not installed
   for pkg in "${packages[@]}"; do
     if ! is_extended_package_installed "$pkg"; then
       to_install+=("$pkg")
     fi
   done
 
+  # Install missing packages
   if [ ${#to_install[@]} -ne 0 ]; then
-    echo "Installing packages: ${to_install[*]}"
-    for pkg in "${to_install[*]}"; do
-    	INSTALL_FUNCTION="install_${to_install[@]}"
-    	eval $INSTALL_FUNCTION
+    echo "📦 Installing packages: ${to_install[*]}"
+    for pkg in "${to_install[@]}"; do
+      local name="${pkg%%::*}"
+      local install_func="install_${name}"
+
+      if declare -f "$install_func" > /dev/null; then
+        echo "▶️ Running $install_func"
+        "$install_func"
+      else
+        echo "⚠️ Function $install_func not found"
+      fi
     done
+  else
+    echo "✅ All packages are already installed."
   fi
 }
 
