@@ -15,7 +15,6 @@ fi
 # Check if the clone was successful
 if [ $? -eq 0 ]; then
   cd "$REPO_NAME"
-  stow zsh
   stow nvim
   stow tmux
   stow editorconfig
