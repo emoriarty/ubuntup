@@ -27,27 +27,4 @@ else
   exit 1
 fi
 
-# Complements
-## Alacritty Themes
-ALACRITTY_PATH=~/.config/alacritty
-ALACRITTY_THEMES_PATH=${ALACRITTY_PATH}/themes
-
-if [ ! -d $ALACRITTY_THEMES_PATH ]; then
-  # Download themes
-  mkdir -p $ALACRITTY_THEMES_PATH
-  git clone https://github.com/alacritty/alacritty-theme $ALACRITTY_THEMES_PATH
-else
-  # Update themes
-  git -C $ALACRITTY_THEMES_PATH pull
-fi
-
-# Verify .gitignore exists
-if [ ! -f $ALACRITTY_PATH/.gitignore ]; then
-  touch $ALACRITTY_PATH/.gitignore
-fi
-
-# Look for themes folder in file
-if ! grep -Fxq "themes/" $ALACRITTY_PATH/.gitignore; then
-  echo "themes/" >> $ALACRITTY_PATH/.gitignore
-fi
 
